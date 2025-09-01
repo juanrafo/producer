@@ -33,8 +33,8 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/producer:1.0.0 .
-        docker push ${{ secrets.ACR_NAME }}.azurecr.io/producer:1.0.0
+        docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/producer:1.1.0 .
+        docker push ${{ secrets.ACR_NAME }}.azurecr.io/producer:1.1.0
 
     - name: Set AKS credentials
       run: az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }} --overwrite-existing
@@ -48,12 +48,12 @@ jobs:
           echo "Release existe, haciendo upgrade..."
           helm upgrade --install producer ./helm \
             --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
-            --set image.tag=1.0.0 \
+            --set image.tag=1.1.0 \
             --namespace dev
         else
           echo "Release no existe, haciendo install..."
           helm install producer ./helm \
             --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
-            --set image.tag=1.0.0 \
+            --set image.tag=1.1.0 \
             --namespace dev
         fi
