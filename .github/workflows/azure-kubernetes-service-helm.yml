@@ -1,0 +1,58 @@
+name: Deploy to AKS with Helm
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Log in to ACR
+      run: az acr login --name ${{ secrets.ACR_NAME }}
+
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/producer:1.0.0 .
+        docker push ${{ secrets.ACR_NAME }}.azurecr.io/producer:1.0.0
+
+    - name: Set AKS credentials
+      run: az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }} --overwrite-existing
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v3
+
+    - name: Deploy with Helm (install or upgrade)
+      run: |        
+        if helm status producer --namespace dev > /dev/null 2>&1; then
+          echo "Release existe, haciendo upgrade..."
+          helm upgrade --install producer ./helm \
+            --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
+            --set image.tag=1.0.0 \
+            --namespace dev
+        else
+          echo "Release no existe, haciendo install..."
+          helm install producer ./helm \
+            --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
+            --set image.tag=1.0.0 \
+            --namespace dev
+        fi
