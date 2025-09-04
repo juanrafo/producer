@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          property-sources:
+            - endpoint: https://keyvault-az-test1.vault.azure.net/
+
+  kafka:
+    properties:
+      security:
+        protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: ${eventhub-config-dev}
+    bootstrap-servers: ${eventhub-url-dev}
+    consumer:
+      group-id: carstore-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+application:
+  name: producer
