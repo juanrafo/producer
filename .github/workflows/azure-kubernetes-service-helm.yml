@@ -49,7 +49,6 @@ jobs:
           helm upgrade --install producer ./helm \
             --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
             --set image.tag=1.1.0 \
-            --set podAnnotations."kubectl\.kubernetes\.io/restartedAt"="$(date +%s)" \
             --namespace dev
         else
           echo "Release no existe, haciendo install..."
