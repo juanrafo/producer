@@ -24,5 +24,11 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
+  datasource:
+    url: jdbc:sqlserver://${server-db-name}.database.windows.net:1433;database=${db-name}
+    username: ${db-user}
+    password: ${db-user-password}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
 application:
   name: producer
