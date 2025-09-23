@@ -32,3 +32,10 @@ spring:
 
 application:
   name: producer
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    # Para ver trazas JDBC
+    java.sql: DEBUG
