@@ -30,6 +30,12 @@ spring:
     password: ${db-user-password}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
+  redis:
+    host: ${redis-host}
+    port: 6379
+    password: ${redis-pass}
+    ssl: false
+
 application:
   name: producer
 
@@ -39,3 +45,5 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     # Para ver trazas JDBC
     java.sql: DEBUG
+
+

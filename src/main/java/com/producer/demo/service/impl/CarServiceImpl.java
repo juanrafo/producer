@@ -24,6 +24,20 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
+    public CarDto add(CarDto carDto) {
+        CarEntity carEntity = new CarEntity();
+        carEntity.setBrand(carDto.getBrand());
+        carEntity.setModel(carDto.getModel());
+        carEntity.setYear(carDto.getYear());
+        CarEntity carEntityNew = carRepository.save(carEntity);
+        return CarDto.builder()
+                .id(carEntityNew.getId())
+                .brand(carEntityNew.getBrand())
+                .model(carEntityNew.getModel())
+                .year(carEntityNew.getYear())
+                .build();
+    }
+
     private CarDto toMap(CarEntity carEntity){
         return CarDto.builder()
                 .id(carEntity.getId())
