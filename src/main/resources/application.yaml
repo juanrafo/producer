@@ -32,9 +32,9 @@ spring:
 
   redis:
     host: ${redis-host}
-    port: 6379
+    port: 6380
     password: ${redis-pass}
-    ssl: false
+    ssl: true
 
 application:
   name: producer
