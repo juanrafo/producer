@@ -24,6 +24,12 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
+    public CarDto getCarById(Long id) throws Exception {
+        CarEntity carEntity = carRepository.findById(id)
+                .orElseThrow(() -> new Exception("Car not found with id: " + id));
+        return toMap(carEntity);
+    }
+
     public CarDto add(CarDto carDto) {
         CarEntity carEntity = new CarEntity();
         carEntity.setBrand(carDto.getBrand());

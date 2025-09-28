@@ -37,6 +37,15 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Coche agregado correctamente");
     }
 
-
+    @GetMapping("/find/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<CarDto> getCar(@PathVariable Long id) throws Exception {
+        CarDto carFromRedis = carDataService.getCarData(CAR_KEY_PREFIX);
+        if(carFromRedis.getId().equals(id)){
+            return ResponseEntity.ok(carFromRedis);
+        }
+        CarDto carDto = carService.getCarById(id);
+        return ResponseEntity.ok(carDto);
+    }
 
 }

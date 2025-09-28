@@ -1,14 +1,14 @@
 package com.producer.demo.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.redis.core.RedisHash;
+import lombok.*;
 
-@Builder
+
 @Getter
 @Setter
-@RedisHash("Car")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CarDto {
     private Long id;
     private String brand;
