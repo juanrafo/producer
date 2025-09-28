@@ -32,8 +32,8 @@ public class CarController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto) throws JsonProcessingException {
         // Lógica para agregar el coche (a implementar)
-        carService.add(carDto);
-        carDataService.saveCarData(CAR_KEY_PREFIX,carDto);
+        CarDto newCardDTO = carService.add(carDto);
+        carDataService.saveCarData(CAR_KEY_PREFIX,newCardDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("Coche agregado correctamente");
     }
 

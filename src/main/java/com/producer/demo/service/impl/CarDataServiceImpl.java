@@ -6,15 +6,25 @@ import com.producer.demo.dto.CarDto;
 import com.producer.demo.persistence.RedisRepository;
 import com.producer.demo.service.CarDataService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
 
 @Service
 @AllArgsConstructor
 public class CarDataServiceImpl implements CarDataService {
-    private final RedisRepository redisRepository;
+    private StringRedisTemplate template;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void saveCarData(String key, CarDto value) throws JsonProcessingException {
-        redisRepository.save(value);
+        String json = objectMapper.writeValueAsString(value);
+        template.opsForValue().set(key, json);
     }
 
+    public CarDto getCarData(String key) throws Exception {
+        String json = template.opsForValue().get(key);
+        return json != null ? objectMapper.readValue(json, CarDto.class) : null;
+    }
 }

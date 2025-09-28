@@ -30,11 +30,13 @@ spring:
     password: ${db-user-password}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
-  redis:
-    host: ${redis-host}
-    port: 6380
-    password: ${redis-pass}
-    ssl: true
+  data:
+    redis:
+      host: ${redis-host}
+      port: 6380
+      password: ${redis-pass}
+      ssl:
+        enabled: true
 
 application:
   name: producer
