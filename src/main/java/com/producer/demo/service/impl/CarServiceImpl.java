@@ -1,17 +1,18 @@
 package com.producer.demo.service.impl;
 
 import com.producer.demo.dto.CarDto;
-//import com.producer.demo.mapper.CarDtoMapper;
 import com.producer.demo.persistence.CarRepository;
 import com.producer.demo.persistence.entity.CarEntity;
 import com.producer.demo.service.CarService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
@@ -25,6 +26,7 @@ public class CarServiceImpl implements CarService {
     }
 
     public CarDto getCarById(Long id) throws Exception {
+        log.info("Fetching car data from Database with id: {}", id);
         CarEntity carEntity = carRepository.findById(id)
                 .orElseThrow(() -> new Exception("Car not found with id: " + id));
         return toMap(carEntity);
