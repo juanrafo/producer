@@ -6,5 +6,5 @@ import com.producer.demo.dto.CarDto;
 public interface CarDataService {
 
     void saveCarData(String key, CarDto value) throws JsonProcessingException;
-    CarDto getCarData(String key) throws Exception;
+    CarDto getCarData(String key,Long id) throws Exception;
 }

@@ -23,6 +23,16 @@ jobs:
     - name: Build with Maven
       run: mvn clean package -DskipTests
 
+
+    - name: Build and analyze with SonarQube
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        mvn clean verify sonar:sonar \
+          -Dsonar.projectKey=juanrafo_producerc \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=$SONAR_TOKEN
+
     - name: Log in to Azure
       uses: azure/login@v1
       with:

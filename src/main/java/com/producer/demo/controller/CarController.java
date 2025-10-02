@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.producer.demo.constants.Constants.CAR_KEY_PREFIX;
 
@@ -40,8 +41,8 @@ public class CarController {
     @GetMapping("/find/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<CarDto> getCar(@PathVariable Long id) throws Exception {
-        CarDto carFromRedis = carDataService.getCarData(CAR_KEY_PREFIX);
-        if(carFromRedis.getId().equals(id)){
+        CarDto carFromRedis = carDataService.getCarData(CAR_KEY_PREFIX,id);
+        if(!Objects.isNull(carFromRedis)){
             return ResponseEntity.ok(carFromRedis);
         }
         CarDto carDto = carService.getCarById(id);
