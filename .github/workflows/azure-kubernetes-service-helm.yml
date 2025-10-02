@@ -21,7 +21,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven
-      run: mvn clean packagec
+      run: mvn clean package
 
 
     - name: Build and analyze with SonarQube
