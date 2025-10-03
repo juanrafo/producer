@@ -26,7 +26,7 @@ public class CarDataServiceImpl implements CarDataService {
         template.opsForList().rightPush(key, json);
     }
 
-    public CarDto getCarData(String key,Long id) throws Exception {
+    public CarDto getCarData(String key,Long id) {
         log.info("Fetching car data from Redis with key: {}", key);
         List<String> json = template.opsForList().range(key,0,-1);
 

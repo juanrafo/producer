@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -16,7 +17,6 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
-    //private final CarDtoMapper carDtoMapper;
 
     public List<CarDto> getAllCars() {
         return carRepository.findAll()
@@ -25,11 +25,10 @@ public class CarServiceImpl implements CarService {
                 .toList();
     }
 
-    public CarDto getCarById(Long id) throws Exception {
+    public CarDto getCarById(Long id) {
         log.info("Fetching car data from Database with id: {}", id);
-        CarEntity carEntity = carRepository.findById(id)
-                .orElseThrow(() -> new Exception("Car not found with id: " + id));
-        return toMap(carEntity);
+        Optional<CarEntity> carEntity = carRepository.findById(id);
+        return carEntity.map(this::toMap).orElse(null);
     }
 
     public CarDto add(CarDto carDto) {

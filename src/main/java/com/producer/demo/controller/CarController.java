@@ -40,12 +40,15 @@ public class CarController {
 
     @GetMapping("/find/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<CarDto> getCar(@PathVariable Long id) throws Exception {
+    public ResponseEntity<CarDto> getCar(@PathVariable Long id){
         CarDto carFromRedis = carDataService.getCarData(CAR_KEY_PREFIX,id);
         if(!Objects.isNull(carFromRedis)){
             return ResponseEntity.ok(carFromRedis);
         }
         CarDto carDto = carService.getCarById(id);
+        if(Objects.isNull(carDto)){
+            return ResponseEntity.status(HttpStatus.OK).body(CarDto.builder().build());
+        }
         return ResponseEntity.ok(carDto);
     }
 

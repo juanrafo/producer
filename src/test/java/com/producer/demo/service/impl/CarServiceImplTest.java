@@ -24,7 +24,7 @@ class CarServiceImplTest {
     public CarRepository carRepository;
 
     @Test
-    public void testGetAllCars() {
+    void testGetAllCars() {
         // Implement test logic here
 
         when(carRepository.findAll()).thenReturn(List.of(
