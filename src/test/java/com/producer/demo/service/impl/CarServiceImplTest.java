@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,5 +58,23 @@ class CarServiceImplTest {
 
         CarDto carDto= carService.getCarById(1L);
         assertNull(carDto);
+    }
+
+    @Test
+    @DisplayName("Test add car successfully")
+    void whenAddCarReturnSuccessfully() {
+        CarDto carDto = CarDto.builder()
+                .brand("Toyota")
+                .model("Camry")
+                .year(2020)
+                .build();
+
+        when(carRepository.save(any(CarEntity.class)))
+                .thenReturn(new CarEntity(1L, "Toyota", "Camry", 2020));
+
+        CarDto carDtoResult= carService.add(carDto);
+        assertNotNull(carDtoResult);
+        assertEquals(1L, carDtoResult.getId());
+
     }
 }
