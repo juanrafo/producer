@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
@@ -19,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 public class CarDataServiceImpl implements CarDataService {
     private StringRedisTemplate template;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private static final long TTL_SECONDS = 20;
 
     public void saveCarData(String key, CarDto value) throws JsonProcessingException {
         String json = objectMapper.writeValueAsString(value);
