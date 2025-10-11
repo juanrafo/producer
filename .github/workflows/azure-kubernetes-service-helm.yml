@@ -69,13 +69,15 @@ jobs:
           helm upgrade --install producer ./helm \
             --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
             --set image.tag=${{ env.IMAGE_TAG }} \
-            --namespace dev
-            --set ingress.enabled=true
+            --set ingress.enabled=true \
+            --namespace dev \
+            --create-namespace
         else
           echo "Release no existe, haciendo install..."
           helm install producer ./helm \
             --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
             --set image.tag=${{ env.IMAGE_TAG }} \
-            --namespace dev
-            --set ingress.enabled=true
+            --set ingress.enabled=true \
+            --namespace dev \
+            --create-namespace
         fi
