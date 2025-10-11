@@ -1,17 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: car-app-ingress
+  name: producer-ingress
   namespace: dev
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx
   rules:
-    - host: car-app.demo.com
+    - host: carapp.demo.com
       http:
         paths:
-          - path: /producer
+          - path: /
             pathType: Prefix
             backend:
               service:
