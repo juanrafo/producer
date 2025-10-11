@@ -7,9 +7,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @SpringBootApplication
 @EnableRedisRepositories(basePackages = "com.producer.demo.persistence")
 public class ProducerApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(ProducerApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(ProducerApplication.class, args);
+    }
 }

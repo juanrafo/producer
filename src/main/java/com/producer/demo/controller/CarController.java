@@ -25,31 +25,27 @@ public class CarController {
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<CarDto>> getAllCars() {
-        List<CarDto> cars = carService.getAllCars();
-        return ResponseEntity.ok(cars);
+        return ResponseEntity.ok(carService.getAllCars());
     }
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> addCar(@RequestBody CarDto carDto) throws JsonProcessingException {
-        // Lógica para agregar el coche (a implementar)
-        CarDto newCardDTO = carService.add(carDto);
-        carDataService.saveCarData(CAR_KEY_PREFIX,newCardDTO);
+        carDataService.saveCarData(CAR_KEY_PREFIX, carService.add(carDto));
         return ResponseEntity.status(HttpStatus.CREATED).body("Coche agregado correctamente");
     }
 
     @GetMapping("/find/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<CarDto> getCar(@PathVariable Long id){
-        CarDto carFromRedis = carDataService.getCarData(CAR_KEY_PREFIX,id);
-        if(!Objects.isNull(carFromRedis)){
+    public ResponseEntity<CarDto> getCar(@PathVariable Long id) {
+        final CarDto carFromRedis = carDataService.getCarData(CAR_KEY_PREFIX, id);
+        if (!Objects.isNull(carFromRedis)) {
             return ResponseEntity.ok(carFromRedis);
         }
-        CarDto carDto = carService.getCarById(id);
-        if(Objects.isNull(carDto)){
+        final CarDto carDto = carService.getCarById(id);
+        if (Objects.isNull(carDto)) {
             return ResponseEntity.status(HttpStatus.OK).body(CarDto.builder().build());
         }
         return ResponseEntity.ok(carDto);
     }
-
 }

@@ -7,9 +7,7 @@ import com.producer.demo.service.CarService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -19,6 +17,7 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
 
     public List<CarDto> getAllCars() {
+        log.info("Fetching all car data from Database");
         return carRepository.findAll()
                 .stream()
                 .map(this::toMap)
@@ -27,30 +26,30 @@ public class CarServiceImpl implements CarService {
 
     public CarDto getCarById(Long id) {
         log.info("Fetching car data from Database with id: {}", id);
-        Optional<CarEntity> carEntity = carRepository.findById(id);
-        return carEntity.map(this::toMap).orElse(null);
+        return carRepository
+                .findById(id)
+                .map(this::toMap)
+                .orElse(null);
     }
 
     public CarDto add(CarDto carDto) {
-        CarEntity carEntity = new CarEntity();
-        carEntity.setBrand(carDto.getBrand());
-        carEntity.setModel(carDto.getModel());
-        carEntity.setYear(carDto.getYear());
-        CarEntity carEntityNew = carRepository.save(carEntity);
-        return CarDto.builder()
-                .id(carEntityNew.getId())
-                .brand(carEntityNew.getBrand())
-                .model(carEntityNew.getModel())
-                .year(carEntityNew.getYear())
-                .build();
+        return toMap(carRepository.save(toEntity(carDto)));
     }
 
-    private CarDto toMap(CarEntity carEntity){
+    private CarDto toMap(CarEntity carEntity) {
         return CarDto.builder()
                 .id(carEntity.getId())
                 .brand(carEntity.getBrand())
                 .model(carEntity.getModel())
                 .year(carEntity.getYear())
+                .build();
+    }
+
+    private CarEntity toEntity(CarDto carDto) {
+        return CarEntity.builder()
+                .brand(carDto.getBrand())
+                .model(carDto.getModel())
+                .year(carDto.getYear())
                 .build();
     }
 }

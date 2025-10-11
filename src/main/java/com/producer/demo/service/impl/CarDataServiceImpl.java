@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -20,19 +19,15 @@ public class CarDataServiceImpl implements CarDataService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void saveCarData(String key, CarDto value) throws JsonProcessingException {
-        String json = objectMapper.writeValueAsString(value);
-        template.opsForList().rightPush(key, json);
+        template.opsForList().rightPush(key, objectMapper.writeValueAsString(value));
     }
 
-    public CarDto getCarData(String key,Long id) {
+    public CarDto getCarData(String key, Long id) {
         log.info("Fetching car data from Redis with key: {}", key);
-        List<String> json = template.opsForList().range(key,0,-1);
-
-        if (Objects.isNull(json))
-            return null;
-        var carDtoOptional =
-        json.stream()
-                .map(item-> {
+        return
+                Objects.requireNonNull(template.opsForList().range(key, 0, -1))
+                        .stream()
+                .map(item -> {
                     try {
                         return objectMapper.readValue(item, CarDto.class);
                     } catch (JsonProcessingException e) {
@@ -40,7 +35,7 @@ public class CarDataServiceImpl implements CarDataService {
                     }
                 })
                 .filter(carDto -> carDto.getId().equals(id))
-                .findFirst();
-        return carDtoOptional.orElse(null);
+                .findFirst()
+                .orElse(null);
     }
 }
