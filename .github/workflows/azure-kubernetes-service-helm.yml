@@ -63,21 +63,17 @@ jobs:
       uses: azure/setup-helm@v3
 
     - name: Deploy with Helm (install or upgrade)
-      run: |        
+      run: |
         if helm status producer --namespace dev > /dev/null 2>&1; then
           echo "Release existe, haciendo upgrade..."
           helm upgrade --install producer ./helm \
             --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
             --set image.tag=${{ env.IMAGE_TAG }} \
-            --set ingress.enabled=true \
-            --namespace dev \
-            --create-namespace
+            --namespace dev
         else
           echo "Release no existe, haciendo install..."
           helm install producer ./helm \
             --set image.repository=${{ secrets.ACR_NAME }}.azurecr.io/producer \
             --set image.tag=${{ env.IMAGE_TAG }} \
-            --set ingress.enabled=true \
-            --namespace dev \
-            --create-namespace
+            --namespace dev
         fi
